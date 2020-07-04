@@ -1,4 +1,6 @@
 models-generate:
 	go generate
 migration-generate:
-	migrate create -ext sql -dir db/migrations -seq $(name) 
+	migrate create -ext sql -dir db/migrations -seq $(name)
+migrate-up:
+    migrate up -source ./db/migrations/ -database mysql://

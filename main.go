@@ -15,7 +15,6 @@ limitations under the License.
 */
 package main
 
-//go:generate sqlboiler --wipe mysql
 import (
 	"app/cmd"
 	"app/config"
