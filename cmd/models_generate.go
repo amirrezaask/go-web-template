@@ -65,6 +65,12 @@ var generateCmd = &cobra.Command{
 		if err != nil {
 			monitoring.Logger().Fatalln(err)
 		}
+
+		//delete sqlboiler.toml
+		err = os.Remove("sqlboiler.toml")
+		if err != nil {
+			monitoring.Logger().Fatalln(err)
+		}
 	},
 }
 
