@@ -16,7 +16,10 @@ limitations under the License.
 package cmd
 
 import (
+	"app/monitoring"
 	"fmt"
+	"os"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -27,7 +30,28 @@ var newCmd = &cobra.Command{
 	Short: "",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("new called")
+		if len(args) < 1 {
+			fmt.Println("Need a name for migration")
+			os.Exit(1)
+		}
+		now := time.Now()
+		fileName := "%.5d_%s.%s.sql"
+		ufd, err := os.Create("./db/migrations/" + fmt.Sprintf(fileName, now.Unix(), args[0], "up"))
+		if err != nil {
+			monitoring.Logger().Fatalln(err)
+		}
+		err = ufd.Close()
+		if err != nil {
+			monitoring.Logger().Fatalln(err)
+		}
+		dfd, err := os.Create("./db/migrations/" + fmt.Sprintf(fileName, now.Unix(), args[0], "down"))
+		if err != nil {
+			monitoring.Logger().Fatalln(err)
+		}
+		err = dfd.Close()
+		if err != nil {
+			monitoring.Logger().Fatalln(err)
+		}
 	},
 }
 
