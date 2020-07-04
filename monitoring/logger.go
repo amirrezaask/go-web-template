@@ -2,10 +2,21 @@ package monitoring
 
 import (
 	"app/config"
+	"github.com/labstack/echo/v4"
 
 	"github.com/sirupsen/logrus"
 )
-
+func LoggerMiddleware(h echo.HandlerFunc) echo.HandlerFunc {
+	return func(ctx echo.Context) error {
+		Logger().Debugln(ctx.Request().RequestURI)
+		err := h(ctx)
+		if ctx.Response().Status > 499 {
+			Logger().Errorln(err)
+		}
+		Logger().Debugln(err)
+		return err
+	}
+}
 var logLevelMapper = map[string]logrus.Level{
 	"trace": logrus.TraceLevel,
 	"debug": logrus.DebugLevel,
