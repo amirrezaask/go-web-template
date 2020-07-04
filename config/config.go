@@ -6,9 +6,12 @@ import (
 	"github.com/spf13/viper"
 )
 
+var C *viper.Viper
+
 func Init() {
-	viper.SetConfigName("appname")
-	viper.SetConfigType("yaml")
+	C = viper.New()
+	C.SetConfigName("appname")
+	C.SetConfigType("yaml")
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatal(err)

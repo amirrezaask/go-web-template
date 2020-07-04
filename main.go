@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "radgo/cmd"
+import "app/cmd"
 
 func main() {
 	cmd.Execute()
