@@ -7,4 +7,7 @@
 - models: Application entities (sqlboiler generated models)
 - config: application configuration
 
+## Getting Started
+### Dependencies
+- golang-migrate: https://github.com/golang-migrate/migrate/tree/master/cmd/migrate
 
