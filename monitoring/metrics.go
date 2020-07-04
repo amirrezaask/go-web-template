@@ -1,6 +1,7 @@
 package monitoring
 
 import (
+	"app/config"
 	grpc_prom "github.com/grpc-ecosystem/go-grpc-prometheus"
 	echo_prom "github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
@@ -10,7 +11,7 @@ import (
 
 //RegisterEchoMetrics registers echo metrics
 func RegisterEchoMetrics(e *echo.Echo) {
-	p := echo_prom.NewPrometheus("blackgate", nil)
+	p := echo_prom.NewPrometheus(config.C.GetString("app.name"), nil)
 	e.Use(p.HandlerFunc)
 }
 
