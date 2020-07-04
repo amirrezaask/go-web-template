@@ -11,3 +11,12 @@
 ### Dependencies
 - golang-migrate: https://github.com/golang-migrate/migrate/tree/master/cmd/migrate
 
+
+## CLI Built in commands
+### Migration
+- new
+- up
+- down
+
+# models
+- generate
