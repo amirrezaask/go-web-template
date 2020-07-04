@@ -19,7 +19,6 @@ import (
 	"app/config"
 	"app/monitoring"
 	"app/transport/http"
-	http2 "net/http"
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +29,7 @@ var serveCmd = &cobra.Command{
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		e := http.NewEchoServer()
-		err := http2.ListenAndServe(config.C.GetString("server.http.address"), e)
+		err :=e.Start(config.C.GetString("server.http.address"))
 		if err != nil {
 			monitoring.Logger().Fatalln(err)
 		}

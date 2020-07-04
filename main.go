@@ -16,8 +16,12 @@ limitations under the License.
 package main
 
 //go:generate sqlboiler --wipe mysql
-import "app/cmd"
+import (
+	"app/cmd"
+	"app/config"
+)
 
 func main() {
+	config.Init()
 	cmd.Execute()
 }

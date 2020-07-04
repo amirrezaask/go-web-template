@@ -10,9 +10,10 @@ var C *viper.Viper
 
 func Init() {
 	C = viper.New()
-	C.SetConfigName("appname")
+	C.AddConfigPath(".")
+	C.SetConfigName("app")
 	C.SetConfigType("yaml")
-	err := viper.ReadInConfig()
+	err := C.ReadInConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
