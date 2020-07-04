@@ -1,1 +1,2 @@
-
+models-generate:
+	go generate

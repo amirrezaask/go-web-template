@@ -24,7 +24,7 @@ func Logger() *logrus.Logger {
 	config.C.SetDefault("log.level", "debug")
 	level := config.C.GetString("log.level")
 	loggerInstance = logrus.New()
-	loggerInstance.SetLevel(level)
+	loggerInstance.SetLevel(logLevelMapper[level])
 	loggerInstance.SetFormatter(&logrus.JSONFormatter{})
 	return loggerInstance
 }
