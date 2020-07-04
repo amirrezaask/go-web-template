@@ -20,7 +20,9 @@ func mysqlConnectionString(host, port, username, password, db string) string {
 	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", host, port, username, password, db)
 }
 
-func Mysql(host, port, username, password, db string) (*sql.DB, error) {
+var mysqlConn *sql.DB
+
+func mysqlConnect(host, port, username, password, db string) (*sql.DB, error) {
 	conn, err := sql.Open("mysql", mysqlConnectionString(host, port, username, password, db))
 	if err != nil {
 		return nil, fmt.Errorf("Error in openning mysql connection: %w", err)
@@ -30,5 +32,17 @@ func Mysql(host, port, username, password, db string) (*sql.DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error in pinging mysql database: %w", err)
 	}
+	mysqlConn = conn
 	return conn, nil
+
+}
+func mysql(host, port, username, password, db string) (*sql.DB, error) {
+	if mysqlConn != nil {
+		err := mysqlConn.Ping()
+		if err != nil {
+			return mysqlConnect(host, port, username, password, db)
+		}
+		return mysqlConn, nil
+	}
+	return mysqlConnect(host, port, username, password, db)
 }
