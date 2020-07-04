@@ -8,8 +8,16 @@
 - config: application configuration
 
 ## Getting Started
+## Used libraries:
+- SQLBoiler: for generating an ORM using a database-first approach.
+- go-migrate: handling database migrations.
+- Cobra: command line functionality
+- Echo: Http web server
+- logrus: logging tool (planning to switch to zap)
+- Viper: configuration
+
 ### Dependencies
-- golang-migrate: https://github.com/golang-migrate/migrate/tree/master/cmd/migrate
+- golang-migrate command line utility: https://github.com/golang-migrate/migrate/tree/master/cmd/migrate
 
 
 ## CLI Built in commands
@@ -18,5 +26,5 @@
 - up
 - down
 
-# models
-- generate
+### models
+- generate: Generate models based on configured database using sqlboiler.
