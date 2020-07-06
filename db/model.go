@@ -3,18 +3,18 @@ type User struct {
 	Id int
 	Friends Users
 }
-func (u *User) Scan(row Row) error {
+func (u *User) Scan(row *sql.Row) error {
 	return row.Scan(&u.Id)
 }
-func (u *User) LoadFriends(rows Rows) error {
+func (u *User) LoadFriends(rows *sql.Rows) error {
 	return u.Friends.Scan(rows)
 }
 
 type Users []*User
-func (us Users) Scan(row Rows) error {
-	for row.Next() {
+func (us Users) Scan(rows *sql.Rows) error {
+	for rows.Next() {
 		u := &User{}
-		err := row.Scan(&u.Id)
+		err := rows.Scan(&u.Id)
 		if err != nil {
 			return err
 		}
@@ -43,33 +43,24 @@ import (
 	"database/sql"
 )
 
-//Row is the composition of *sql.Row and *sql.Rows
-type Row interface {
-	Scan(dest ...interface{}) error
-}
-type Rows interface {
-	Row
-	Next() bool
-}
-
 //RowScanner should be implemented by all of the types who can get their data from Row.
 type RowScanner interface {
-	Scan(Row) error
+	Scan(*sql.Row) error
 }
 
 type RowsScanner interface {
-	Scan(Rows) error
+	Scan(*sql.Rows) error
 }
 
 //Query a single row, use when you are sure that you're query selects only one row of data.
-func QueryRow(db *sql.DB, rs RowScanner, query string, params ...interface{}) error {
-	row := db.QueryRow(query, params...)
+func QueryRow(db *sql.DB, rs RowScanner, query string, args ...interface{}) error {
+	row := db.QueryRow(query, args...)
 	return rs.Scan(row)
 }
 
 //Query multiple rows.
-func Query(db *sql.DB, rs RowsScanner, query string, params ...interface{}) error {
-	rows, err := db.Query(query, params...)
+func Query(db *sql.DB, rs RowsScanner, query string, args ...interface{}) error {
+	rows, err := db.Query(query, args...)
 	if err != nil {
 		return err
 	}
@@ -81,3 +72,4 @@ func Query(db *sql.DB, rs RowsScanner, query string, params ...interface{}) erro
 	}
 	return nil
 }
+
