@@ -41,6 +41,8 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
+	"reflect"
 )
 
 //RowScanner should be implemented by all of the types who can get their data from Row.
@@ -72,4 +74,20 @@ func Query(db *sql.DB, rs RowsScanner, query string, args ...interface{}) error 
 	}
 	return nil
 }
-
+//Fields generate a list of pointers to the fields of given struct, this function use reflection so it should have
+//some overhead.
+func Fields(m interface{}) ([]interface{}, error) {
+	v := reflect.ValueOf(m)
+	if v.Type().Kind() != reflect.Struct {
+		if v.Type().Kind() == reflect.Ptr {
+			return Fields(v.Elem().Interface())
+		}
+		return nil, fmt.Errorf("cant get fields of %s", v.Type().String())
+	}
+	var ptrs []interface{}
+	for i:=0;i<v.NumField();i++ {
+		f := v.Field(i).Interface()
+		ptrs = append(ptrs, &f)
+	}
+	return ptrs, nil
+}
