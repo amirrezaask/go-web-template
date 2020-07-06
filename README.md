@@ -12,8 +12,7 @@ This template is a bundle of the libraries and structure that I use in almost al
 it's not a general purpose template or framework for everyone so don't expect to find everything you need.
 
 ## Used libraries:
-- SQLBoiler: for generating an ORM using a database-first approach.
-- sqlx: simpler approach to database, if you just want some help in binding to structs.
+- SQLBoiler: for generating an ORM using a database-first approach. (recommended only for applications with a lot of tables)
 - go-migrate: handling database migrations.
 - Cobra: command line functionality
 - Echo: Http web server
