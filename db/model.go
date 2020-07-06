@@ -1,5 +1,4 @@
 /*
-
 type User struct {
 	Id int
 	Friends Users

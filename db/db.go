@@ -4,7 +4,6 @@ import (
 	"app/config"
 	"database/sql"
 	"errors"
-	"github.com/jmoiron/sqlx"
 )
 
 func DB() (*sql.DB, error) {
@@ -21,21 +20,4 @@ func DB() (*sql.DB, error) {
 	default:
 		return nil, errors.New("No database selected")
 	}
-}
-
-func DBX() (*sqlx.DB, error) {
-	config.C.SetDefault("database.type", "sqlite3")
-	db := config.C.GetString("database.type")
-	host := config.C.GetString("database.host")
-	port := config.C.GetString("database.port")
-	user := config.C.GetString("database.user")
-	password := config.C.GetString("database.password")
-	name := config.C.GetString("database.name")
-	switch db {
-	case "mysql":
-		return mysqlX(host, port, user, password, name)
-	default:
-		return nil, errors.New("No valid database is selected")
-	}
-
 }
