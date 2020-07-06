@@ -12,6 +12,7 @@ type Mysql struct {
 }
 
 func (m *Mysql) DB() (*sql.DB, error) {
+	setMysqlDefaultConfiguration()
 	host := config.C.GetString("database.host")
 	port := config.C.GetString("database.port")
 	user := config.C.GetString("database.user")
@@ -55,5 +56,12 @@ func mysqlConnect(host, port, username, password, db string) (*sql.DB, error) {
 		return nil, fmt.Errorf("Error in pinging mysql database: %w", err)
 	}
 	return conn, nil
+}
+
+func setMysqlDefaultConfiguration() {
+	config.C.Set("database.host", "127.0.0.1")
+	config.C.Set("database.port", "3306")
+	config.C.Set("database.user", "root")
+	config.C.Set("database.password", "")
 }
 
