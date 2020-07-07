@@ -1,40 +1,35 @@
 /*
 type User struct {
 	Id int
-	Friends Users
+	Name string
 }
-func (u *User) Scan(row *sql.Row) error {
-	return row.Scan(&u.Id)
-}
-func (u *User) LoadFriends(rows *sql.Rows) error {
-	return u.Friends.Scan(rows)
-}
-
-type Users []*User
-func (us Users) Scan(rows *sql.Rows) error {
-	for rows.Next() {
-		u := &User{}
-		err := rows.Scan(&u.Id)
-		if err != nil {
-			return err
-		}
-		us = append(us, u)
+func (u *User) Scan(row *sql.Rows) error {
+	if !row.Next() {
+		return errors.New("no result in query response")
 	}
-	return nil
+	return row.Scan(&u.Id, &u.Name)
+}
+func (u *User) Insert(db *sql.DB) (sql.Result, error) {
+	return db.Exec(InsertQuery("users", "id", "name"), u.Id, u.Name)
+}
+func (u *User) Update(db *sql.DB) (sql.Result, error) {
+	return db.Exec(UpdateQuery("users", "id=?", "name"),u.Id, u.Name)
+}
+func (u *User) Delete(db *sql.DB) (sql.Result, error) {
+	return db.Exec(DeleteQuery("users", "id=?"), u.Id)
 }
 
 func main() {
 	var db *sql.DB
-	users := Users{}
-	err := Query(db, users, `SELECT * FROM users`)
-	if err != nil {
-		panic(err)
-	}
-	user := &User{}
-	err = QueryRow(db, user, `SELECT * FROM users WHERE id=?`, 1)
-	friends := Users{}
-	err =  Query(db, friends, `SELECT * FROM users WHERE friend_id=?`, 1)
+	u := &User{Id:1}
+	Query(db, u, "WHERE id=?", u.Id)
+	u.Name = "amirreza"
+	u.Update(db)
+	u.Delete(db)
+	u2 := &User{Name:"Asghar"}
+	u2.Insert(db)
 }
+
 */
 
 package db
@@ -42,26 +37,34 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"reflect"
+	"strings"
 )
 
-//RowScanner should be implemented by all of the types who can get their data from Row.
-type RowScanner interface {
-	Scan(*sql.Row) error
-}
-
-type RowsScanner interface {
+type Selectable interface {
 	Scan(*sql.Rows) error
 }
 
-//Query a single row, use when you are sure that you're query selects only one row of data.
-func QueryRow(db *sql.DB, rs RowScanner, query string, args ...interface{}) error {
-	row := db.QueryRow(query, args...)
-	return rs.Scan(row)
+type Insertable interface {
+	Insert(db *sql.DB) (sql.Result, error)
 }
 
-//Query multiple rows.
-func Query(db *sql.DB, rs RowsScanner, query string, args ...interface{}) error {
+type Updateable interface {
+	Update(db *sql.DB) (sql.Result, error)
+}
+
+type Deleteable interface {
+	Delete(db *sql.DB) (sql.Result, error)
+}
+
+type SqlEntity interface {
+	Selectable
+	Insertable
+	Updateable
+	Deleteable
+}
+
+//Query
+func Query(db *sql.DB, rs Selectable, query string, args ...interface{}) error {
 	rows, err := db.Query(query, args...)
 	if err != nil {
 		return err
@@ -74,20 +77,23 @@ func Query(db *sql.DB, rs RowsScanner, query string, args ...interface{}) error 
 	}
 	return nil
 }
-//Fields generate a list of pointers to the fields of given struct, this function use reflection so it should have
-//some overhead.
-func Fields(m interface{}) ([]interface{}, error) {
-	v := reflect.ValueOf(m)
-	if v.Type().Kind() != reflect.Struct {
-		if v.Type().Kind() == reflect.Ptr {
-			return Fields(v.Elem().Interface())
-		}
-		return nil, fmt.Errorf("cant get fields of %s", v.Type().String())
+//InsertQuery is a helper method to generate insert query for given table and columns.
+func InsertQuery(table string, columns ...string) string {
+	var questions []string
+	for i:=0;i<len(columns);i++ {
+		questions = append(questions, "?")
 	}
-	var ptrs []interface{}
-	for i:=0;i<v.NumField();i++ {
-		f := v.Field(i).Interface()
-		ptrs = append(ptrs, &f)
+	return fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)", table, strings.Join(columns, ", "), strings.Join(questions, ", "))
+}
+//UpdateQuery is a helper method to generate an update query for given table and columns.
+func UpdateQuery(table string, where string, columns ...string) string {
+	var colPair []string
+	for _, c := range columns {
+		colPair = append(colPair, fmt.Sprintf("%s=?", c))
 	}
-	return ptrs, nil
+	return fmt.Sprintf("UPDATE %s WHERE %s SET %s", table, where, strings.Join(colPair, ", "))
+}
+//DeleteQuery is a helper method to generate a delete query for given table.
+func DeleteQuery(table string, where string) string {
+	return fmt.Sprintf("DELETE FROM %s WHERE %s", table, where)
 }
