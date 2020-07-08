@@ -45,15 +45,15 @@ type Selectable interface {
 }
 
 type Insertable interface {
-	Insert(db *sql.DB) (sql.Result, error)
+	Insert() (string, []interface{})
 }
 
 type Updateable interface {
-	Update(db *sql.DB) (sql.Result, error)
+	Update() (string, []interface{})
 }
 
 type Deleteable interface {
-	Delete(db *sql.DB) (sql.Result, error)
+	Delete() (string, []interface{})
 }
 
 type SqlEntity interface {
@@ -77,6 +77,10 @@ func Query(db *sql.DB, rs Selectable, query string, args ...interface{}) error {
 	}
 	return nil
 }
+func Insert(db *sql.DB, i Insertable) (sql.Result, error) {
+	stmt, values := i.Insert()
+	return db.Exec(stmt, values...)
+}
 //InsertQuery is a helper method to generate insert query for given table and columns.
 func InsertQuery(table string, columns ...string) string {
 	var questions []string
@@ -85,6 +89,10 @@ func InsertQuery(table string, columns ...string) string {
 	}
 	return fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)", table, strings.Join(columns, ", "), strings.Join(questions, ", "))
 }
+func Update(db *sql.DB, u Updateable) (sql.Result, error) {
+	stmt, values := u.Update()
+	return db.Exec(stmt, values...)
+}
 //UpdateQuery is a helper method to generate an update query for given table and columns.
 func UpdateQuery(table string, where string, columns ...string) string {
 	var colPair []string
@@ -92,6 +100,10 @@ func UpdateQuery(table string, where string, columns ...string) string {
 		colPair = append(colPair, fmt.Sprintf("%s=?", c))
 	}
 	return fmt.Sprintf("UPDATE %s WHERE %s SET %s", table, where, strings.Join(colPair, ", "))
+}
+func Delete(db *sql.DB, d Deleteable) (sql.Result, error) {
+	stmt, values := d.Delete()
+	return db.Exec(stmt, values...)
 }
 //DeleteQuery is a helper method to generate a delete query for given table.
 func DeleteQuery(table string, where string) string {
