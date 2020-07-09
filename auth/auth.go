@@ -32,5 +32,5 @@ type Identity interface {
 	//whether this user has access to given key, it can be a path, resource or anything
 	HasAccessTo(key string) error
 }
-
+//IdentityProvider is function type that gets a jwt token and creates the identity based on that
 type IdentityProvider func(*jwt.Token) (Identity, error)
