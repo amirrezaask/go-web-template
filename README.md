@@ -24,9 +24,10 @@ it's not a general purpose template or framework for everyone so don't expect to
 - new
 - up
 - down
-
-### models
-- generate: Generate models based on configured database using sqlboiler.
+### sqlboiler
+- generate: generate models using sqlboiler based on configured sql database.
+### swag
+- generate: generate  models for http handlers based on swagger API spec
 
 ### Dependencies
 - golang-migrate command line utility: https://github.com/golang-migrate/migrate/tree/master/cmd/migrate
