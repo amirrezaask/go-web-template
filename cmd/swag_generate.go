@@ -16,31 +16,36 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
+	"app/monitoring"
 	"github.com/spf13/cobra"
+	"os/exec"
 )
 
-// modelsCmd represents the models command
-var modelsCmd = &cobra.Command{
-	Use:   "models",
-	Short: "models management",
+// generateCmd represents the generate command
+var swagGenerateCmd = &cobra.Command{
+	Use:   "generate",
+	Short: "",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("models called")
+		cmdArgs := []string{"generate", "model", "-m", "models", "-t", "./transport/http"}
+		swagModelCommand := exec.Command("swagger", cmdArgs...)
+		err := swagModelCommand.Run()
+		if err != nil {
+			monitoring.Logger().Fatalln(err)
+		}
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(modelsCmd)
+	swagCmd.AddCommand(swagGenerateCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// modelsCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// generateCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// modelsCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// generateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

@@ -8,7 +8,11 @@ import (
 )
 
 func New() (*migrate.Migrate, error) {
-	db ,err := db2.DB()
+	prv ,err := db2.NewProvider()
+	if err != nil {
+		return nil, err
+	}
+	db, err := prv.DB()
 	if err != nil {
 		return nil, err
 	}

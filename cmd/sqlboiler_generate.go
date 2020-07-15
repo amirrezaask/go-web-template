@@ -75,7 +75,7 @@ var generateCmd = &cobra.Command{
 }
 
 func init() {
-	modelsCmd.AddCommand(generateCmd)
+	sqlboilerCmd.AddCommand(generateCmd)
 
 	// Here you will define your flags and configuration settings.
 
