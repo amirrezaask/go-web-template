@@ -28,7 +28,8 @@ it's not a general purpose template or framework for everyone so don't expect to
 - generate: generate models using sqlboiler based on configured sql database.
 ### swag
 - generate: generate  models for http handlers based on swagger API spec
-
+### GRPC:
+- generate: generate GRPC go files based on given proto file
 ### Dependencies
 - golang-migrate command line utility: https://github.com/golang-migrate/migrate/tree/master/cmd/migrate
 
