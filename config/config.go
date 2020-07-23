@@ -1,20 +1,17 @@
 package config
 
 import (
-	"log"
-
-	"github.com/spf13/viper"
+	"github.com/golobby/config"
+	"github.com/golobby/config/feeder"
 )
 
-var C *viper.Viper
+var C *config.Config
 
 func Init() {
-	C = viper.New()
-	C.AddConfigPath(".")
-	C.SetConfigName("app")
-	C.SetConfigType("yaml")
-	err := C.ReadInConfig()
-	if err != nil {
-		log.Fatal(err)
-	}
+	config.New(config.Options{
+		Feeder: feeder.Json{
+			"config.json",
+		},
+		Env:    "",
+	})
 }

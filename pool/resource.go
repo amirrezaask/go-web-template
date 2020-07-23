@@ -1,22 +1,21 @@
 package pool
 
-type Pool interface{
+type ResourcePool interface{
 	Factory() interface{}
 	Acquire(dest interface{})
 	Release(resource interface{})
 }
 
-
-type GeneralPool struct {
+type GenericResourcePool struct {
 	factory func() interface{}
 	pool chan interface{}
 }
 
-func (g *GeneralPool) Factory() interface{} {
+func (g *GenericResourcePool) Factory() interface{} {
 	return g.factory()
 }
 
-func (g *GeneralPool) Acquire(dest interface{}) {
+func (g *GenericResourcePool) Acquire(dest interface{}) {
 	select {
 	case dest=<-g.pool:
 		return
@@ -26,7 +25,7 @@ func (g *GeneralPool) Acquire(dest interface{}) {
 	}
 }
 
-func (g *GeneralPool) Release(resource interface{}) {
+func (g *GenericResourcePool) Release(resource interface{}) {
 	g.pool<-resource
 }
 
