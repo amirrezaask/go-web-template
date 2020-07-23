@@ -4,40 +4,39 @@ import (
 	"app/config"
 	"github.com/labstack/echo/v4"
 	"go.uber.org/zap"
-	"log"
-
-	"github.com/sirupsen/logrus"
 )
+
 func LoggerMiddleware(h echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
-		Logger().Debugln(ctx.Request().RequestURI)
+		Logger().Debugf("%s\n", ctx.Request().RequestURI)
 		err := h(ctx)
 		if ctx.Response().Status > 499 {
-			Logger().Errorln(err)
+			Logger().Errorf("%s\n", err)
 		}
-		Logger().Debugln(err)
+		Logger().Debugf("%s\n", err)
 		return err
 	}
 }
-var logLevelMapper = map[string]logrus.Level{
-	"trace": logrus.TraceLevel,
-	"debug": logrus.DebugLevel,
-	"info":  logrus.InfoLevel,
-	"warn":  logrus.WarnLevel,
-	"error": logrus.ErrorLevel,
-	"fatal": logrus.FatalLevel,
-}
 
-var loggerInstance *logrus.Logger
+var loggerInstance *zap.SugaredLogger
 
 func Logger() *zap.SugaredLogger {
 	if loggerInstance != nil {
 		return loggerInstance
 	}
-	level, err := config.C.GetString("log.level")
-	if err != nil {
-	    log.Fatalln(err)
+	if config.AppEnv() == "dev" || config.AppEnv() == "debug" {
+		l, err := zap.NewDevelopment()
+		if err != nil {
+			panic(err)
+		}
+		loggerInstance = l.Sugar()
+		return loggerInstance
+	} else {
+		l, err := zap.NewProduction()
+		if err != nil {
+			panic(err)
+		}
+		loggerInstance = l.Sugar()
+		return loggerInstance
 	}
-	l, err := zap.NewProduction()
-	return l.Sugar()
 }

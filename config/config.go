@@ -8,8 +8,8 @@ import (
 type appConfig struct {
 	*config.Config
 }
-func (a *appConfig) AppEnv() string {
-	env, err := a.GetString("env")
+func AppEnv() string {
+	env, err := C.GetString("env")
 	if err != nil {
 		log.Fatalln(err)
 	}
