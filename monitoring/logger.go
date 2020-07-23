@@ -32,7 +32,7 @@ func Logger() *logrus.Logger {
 	if loggerInstance != nil {
 		return loggerInstance
 	}
-	config.C.SetDefault("log.level", "debug")
+	config.C.GetString("log.level", "debug")
 	level := config.C.GetString("log.level")
 	loggerInstance = logrus.New()
 	loggerInstance.SetLevel(logLevelMapper[level])

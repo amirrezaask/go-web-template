@@ -14,12 +14,30 @@ type Postgres struct {
 
 func (p *Postgres) DB() (*sql.DB, error) {
 	setPostgresDefaultConfiguration()
-	host := config.C.GetString("database.host")
-	port := config.C.GetString("database.port")
-	user := config.C.GetString("database.user")
-	password := config.C.GetString("database.password")
-	name := config.C.GetString("database.name")
-	sslmode := config.C.GetString("database.sslmode")
+	host, err := config.C.GetString("database.host")
+	if err != nil {
+		return nil, fmt.Errorf("could'nt create Mysql instance %w", err)
+	}
+	port, err := config.C.GetString("database.port")
+	if err != nil {
+		return nil, fmt.Errorf("could'nt create Mysql instance %w", err)
+	}
+	user, err := config.C.GetString("database.user")
+	if err != nil {
+		return nil, fmt.Errorf("could'nt create Mysql instance %w", err)
+	}
+	password, err := config.C.GetString("database.password")
+	if err != nil {
+		return nil, fmt.Errorf("could'nt create Mysql instance %w", err)
+	}
+	name, err := config.C.GetString("database.name")
+	if err != nil {
+		return nil, fmt.Errorf("could'nt create Mysql instance %w", err)
+	}
+	sslmode, err := config.C.GetString("database.sslmode")
+	if err != nil {
+		return nil, fmt.Errorf("could'nt create Mysql instance %w", err)
+	}
 	if p.conn == nil {
 		conn, err := postgresConnect(host, port, user, password, name, sslmode)
 		if err != nil {

@@ -5,21 +5,24 @@ import (
 	"database/sql"
 	"fmt"
 )
-type Provider interface {
+type SQLProvider interface {
 	DB() (*sql.DB, error)
 }
 
-func NewProvider() (Provider, error) {
+func NewSQLProvider() (SQLProvider, error) {
 	config.C.Set("database.type", "sqlite3")
-	dbType := config.C.GetString("database.type")
+	dbType, err := config.C.GetString("database.type")
+	if err != nil {
+	    return nil, fmt.Errorf("can't create DB provider: %w", err)
+	}
 	switch dbType {
 	case "mysql":
 		return &Mysql{}, nil
 	case "postgres":
 		return &Postgres{}, nil
 	case "sqlite3":
-		return &Sqlite{}, nil
+		return &SQLite{}, nil
 	default:
-		return Provider(nil), fmt.Errorf("%s is not supported as a database provider", dbType)
+		return SQLProvider(nil), fmt.Errorf("%s is not supported as a database provider", dbType)
 	}
 }

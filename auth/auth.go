@@ -10,12 +10,20 @@ var ErrInvalidJWT = errors.New("invalid jwt token")
 
 func NewJWTToken(claims jwt.Claims) (string, error) {
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return t.SignedString(config.C.GetString("auth.jwt.secret"))
+	secret, err := config.C.GetString("auth.jwt.secret")
+	if err != nil {
+		return "", err
+	}
+	return t.SignedString(secret)
 }
 
 func ValidateToken(token string) (*jwt.Token, error) {
+	secret, err := config.C.GetString("auth.jwt.secret")
+	if err != nil {
+		return nil, err
+	}
 	t, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-		return config.C.GetString("auth.jwt.secret"), nil
+		return secret, nil
 	})
 	if err != nil {
 		return nil, err

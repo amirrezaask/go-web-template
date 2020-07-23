@@ -1,19 +1,23 @@
 package config
 
 import (
-	"log"
-	"os"
-
 	"github.com/golobby/config"
+	"log"
 )
+
+type appConfig struct {
+	*config.Config
+}
+func (a *appConfig) AppEnv() string {
+	env, err := a.GetString("env")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return env
+}
 
 //C is Instance of golobby config in use.
-var C *config.Config
-
-var (
-	//APPEnv is a variable that shows which environment application is running in. (dev, prod, testing)
-	APPEnv = os.Getenv("APPENV")
-)
+var C *appConfig
 
 //Init initializes the config package and loads config file.
 func Init(opts config.Options) {
@@ -21,5 +25,5 @@ func Init(opts config.Options) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	C = c
+	C = &appConfig{c}
 }

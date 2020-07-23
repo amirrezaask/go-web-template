@@ -3,15 +3,19 @@ package db
 import (
 	"app/config"
 	"database/sql"
+	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type Sqlite struct {
+type SQLite struct {
 	conn *sql.DB
 }
 
-func (s *Sqlite) DB() (*sql.DB, error) {
-	path := config.C.GetString("database.path")
+func (s *SQLite) DB() (*sql.DB, error) {
+	path, err := config.C.GetString("database.path")
+	if err != nil {
+	    return nil, fmt.Errorf("could not create SQLite instance: %w", err)
+	}
 	if s.conn == nil {
 		conn, err := sqliteConnect(path)
 		if err != nil {

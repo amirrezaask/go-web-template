@@ -12,12 +12,26 @@ type Mysql struct {
 }
 
 func (m *Mysql) DB() (*sql.DB, error) {
-	setMysqlDefaultConfiguration()
-	host := config.C.GetString("database.host")
-	port := config.C.GetString("database.port")
-	user := config.C.GetString("database.user")
-	password := config.C.GetString("database.password")
-	name := config.C.GetString("database.name")
+	host, err := config.C.GetString("database.host")
+	if err != nil {
+	    return nil, fmt.Errorf("could'nt create Mysql instance %w", err)
+	}
+	port, err := config.C.GetString("database.port")
+	if err != nil {
+		return nil, fmt.Errorf("could'nt create Mysql instance %w", err)
+	}
+	user, err := config.C.GetString("database.user")
+	if err != nil {
+		return nil, fmt.Errorf("could'nt create Mysql instance %w", err)
+	}
+	password, err := config.C.GetString("database.password")
+	if err != nil {
+		return nil, fmt.Errorf("could'nt create Mysql instance %w", err)
+	}
+	name, err := config.C.GetString("database.name")
+	if err != nil {
+		return nil, fmt.Errorf("could'nt create Mysql instance %w", err)
+	}
 	if m.conn == nil {
 		conn, err := mysqlConnect(host, port, user, password, name)
 		if err != nil {
@@ -57,11 +71,3 @@ func mysqlConnect(host, port, username, password, db string) (*sql.DB, error) {
 	}
 	return conn, nil
 }
-
-func setMysqlDefaultConfiguration() {
-	config.C.Set("database.host", "127.0.0.1")
-	config.C.Set("database.port", "3306")
-	config.C.Set("database.user", "root")
-	config.C.Set("database.password", "")
-}
-
