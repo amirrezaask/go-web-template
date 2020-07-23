@@ -3,6 +3,8 @@ package monitoring
 import (
 	"app/config"
 	"github.com/labstack/echo/v4"
+	"go.uber.org/zap"
+	"log"
 
 	"github.com/sirupsen/logrus"
 )
@@ -28,14 +30,14 @@ var logLevelMapper = map[string]logrus.Level{
 
 var loggerInstance *logrus.Logger
 
-func Logger() *logrus.Logger {
+func Logger() *zap.SugaredLogger {
 	if loggerInstance != nil {
 		return loggerInstance
 	}
-	config.C.GetString("log.level", "debug")
-	level := config.C.GetString("log.level")
-	loggerInstance = logrus.New()
-	loggerInstance.SetLevel(logLevelMapper[level])
-	loggerInstance.SetFormatter(&logrus.JSONFormatter{})
-	return loggerInstance
+	level, err := config.C.GetString("log.level")
+	if err != nil {
+	    log.Fatalln(err)
+	}
+	l, err := zap.NewProduction()
+	return l.Sugar()
 }
