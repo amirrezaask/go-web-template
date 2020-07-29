@@ -17,7 +17,7 @@ package cmd
 
 import (
 	"app/config"
-	"app/monitoring"
+	"app/log"
 	"app/transport/http"
 
 	"github.com/spf13/cobra"
@@ -32,7 +32,7 @@ var serveCmd = &cobra.Command{
 		e := http.NewEchoServer()
 		err := e.Start(config.C.GetString("server.http.address"))
 		if err != nil {
-			monitoring.Logger().Fatalf("%s\n", err)
+			log.Logger().Fatalf("%s\n", err)
 		}
 	},
 }

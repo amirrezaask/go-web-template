@@ -1,7 +1,7 @@
 package http
 
 import (
-	"app/monitoring"
+	"app/log"
 	"github.com/labstack/echo/v4"
 )
 
@@ -15,7 +15,7 @@ func Hello() echo.HandlerFunc {
 
 func NewEchoServer() *echo.Echo {
 	e := echo.New()
-	e.Use(monitoring.LoggerMiddleware)
+	e.Use(log.LoggerMiddleware)
 	withRoutes(e)
 	return e
 }

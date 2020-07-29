@@ -1,4 +1,4 @@
-package monitoring
+package log
 
 import (
 	"app/config"
