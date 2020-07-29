@@ -3,6 +3,7 @@ package auth
 import (
 	"app/config"
 	"errors"
+
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -10,18 +11,12 @@ var ErrInvalidJWT = errors.New("invalid jwt token")
 
 func NewJWTToken(claims jwt.Claims) (string, error) {
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	secret, err := config.C.GetString("auth.jwt.secret")
-	if err != nil {
-		return "", err
-	}
+	secret := config.C.GetString("auth.jwt.secret")
 	return t.SignedString(secret)
 }
 
 func ValidateToken(token string) (*jwt.Token, error) {
-	secret, err := config.C.GetString("auth.jwt.secret")
-	if err != nil {
-		return nil, err
-	}
+	secret := config.C.GetString("auth.jwt.secret")
 	t, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return secret, nil
 	})
@@ -40,5 +35,6 @@ type Identity interface {
 	//whether this user has access to given key, it can be a path, resource or anything
 	HasAccessTo(key string) error
 }
+
 //IdentityProvider is function type that gets a jwt token and creates the identity based on that
 type IdentityProvider func(*jwt.Token) (Identity, error)

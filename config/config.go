@@ -1,30 +1,30 @@
 package config
 
 import (
-	"github.com/golobby/config"
 	"log"
+
+	"github.com/spf13/viper"
 )
 
 type appConfig struct {
-	*config.Config
+	*viper.Viper
 }
 
 func AppEnv() string {
-	env, err := C.GetString("env")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	return env
+	return C.GetString("app.env")
 }
 
 //C is Instance of golobby config in use.
 var C *appConfig
 
 //Init initializes the config package and loads config file.
-func Init(opts config.Options) {
-	c, err := config.New(opts)
+func Init() {
+	v := viper.New()
+	v.AddConfigPath(".")
+	v.SetConfigName("app")
+	err := v.ReadInConfig()
 	if err != nil {
 		log.Fatalln(err)
 	}
-	C = &appConfig{c}
+	C = &appConfig{v}
 }

@@ -5,16 +5,15 @@ import (
 	"database/sql"
 	"fmt"
 )
+
 type SQLProvider interface {
 	DB() (*sql.DB, error)
 }
 
 func NewSQLProvider() (SQLProvider, error) {
-	config.C.Set("database.type", "sqlite3")
-	dbType, err := config.C.GetString("database.type")
-	if err != nil {
-	    return nil, fmt.Errorf("can't create DB provider: %w", err)
-	}
+	config.C.SetDefault("database.type", "sqlite3")
+	dbType := config.C.GetString("database.type")
+
 	switch dbType {
 	case "mysql":
 		return &Mysql{}, nil

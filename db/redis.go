@@ -3,30 +3,16 @@ package db
 import (
 	"app/config"
 	"fmt"
+
 	"github.com/go-redis/redis/v7"
 )
 
 func loadRedisConfigurationFromConfig() (*redis.Options, error) {
-	host, err := config.C.GetString("kv.redis.host")
-	if err != nil {
-		return nil, fmt.Errorf("could'nt create redis instance %w", err)
-	}
-	port, err := config.C.GetString("kv.redis.port")
-	if err != nil {
-		return nil, fmt.Errorf("could'nt create redis instance %w", err)
-	}
-	username, err := config.C.GetString("kv.redis.username")
-	if err != nil {
-		return nil, fmt.Errorf("could'nt create redis instance %w", err)
-	}
-	password, err := config.C.GetString("kv.redis.password")
-	if err != nil {
-		return nil, fmt.Errorf("could'nt create redis instance %w", err)
-	}
-	database, err := config.C.GetInt("kv.redis.database")
-	if err != nil {
-		return nil, fmt.Errorf("could'nt create redis instance %w", err)
-	}
+	host := config.C.GetString("redis.host")
+	port := config.C.GetString("redis.port")
+	username := config.C.GetString("redis.username")
+	password := config.C.GetString("redis.password")
+	database := config.C.GetInt("redis.database")
 	return &redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", host, port),
 		Username: username,
@@ -49,7 +35,7 @@ func connect(options *redis.Options) (*redis.Client, error) {
 func NewRedis() (*redis.Client, error) {
 	options, err := loadRedisConfigurationFromConfig()
 	if err != nil {
-	    return nil, err
+		return nil, err
 	}
 	if cli == nil {
 		return connect(options)

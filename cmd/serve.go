@@ -19,6 +19,7 @@ import (
 	"app/config"
 	"app/monitoring"
 	"app/transport/http"
+
 	"github.com/spf13/cobra"
 )
 
@@ -26,12 +27,12 @@ import (
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "",
-	Long: ``,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		e := http.NewEchoServer()
-		err :=e.Start(config.C.GetString("server.http.address"))
+		err := e.Start(config.C.GetString("server.http.address"))
 		if err != nil {
-			monitoring.Logger().Fatalln(err)
+			monitoring.Logger().Fatalf("%s\n", err)
 		}
 	},
 }

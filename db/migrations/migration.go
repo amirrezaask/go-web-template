@@ -3,12 +3,13 @@ package migration
 import (
 	"app/config"
 	db2 "app/db"
-	"github.com/golang-migrate/migrate/v4/database/mysql"
+
 	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/mysql"
 )
 
 func New() (*migrate.Migrate, error) {
-	prv ,err := db2.NewProvider()
+	prv, err := db2.NewSQLProvider()
 	if err != nil {
 		return nil, err
 	}
