@@ -2,6 +2,9 @@ package db
 
 import (
 	"app/config"
+	"app/transport/mysql"
+	"app/transport/psql"
+	"app/transport/sqlite"
 	"database/sql"
 	"fmt"
 )
@@ -16,11 +19,11 @@ func NewSQLProvider() (SQLProvider, error) {
 
 	switch dbType {
 	case "mysql":
-		return &Mysql{}, nil
+		return &mysql.Mysql{}, nil
 	case "postgres":
-		return &Postgres{}, nil
+		return &psql.Postgres{}, nil
 	case "sqlite3":
-		return &SQLite{}, nil
+		return &sqlite.SQLite{}, nil
 	default:
 		return SQLProvider(nil), fmt.Errorf("%s is not supported as a database provider", dbType)
 	}
