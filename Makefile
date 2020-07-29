@@ -1,4 +1,6 @@
 install-deps:
+	echo "Installing Cobra bins"
+	GO111MODULE=off go get -u github.com/spf13/cobra/cobra
 	echo "Installing sqlboiler bins"
 	GO111MODULE=off go get -u -t github.com/volatiletech/sqlboiler
 	GO111MODULE=off go get github.com/volatiletech/sqlboiler/drivers/sqlboiler-psql
