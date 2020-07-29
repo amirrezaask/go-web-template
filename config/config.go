@@ -8,6 +8,7 @@ import (
 type appConfig struct {
 	*config.Config
 }
+
 func AppEnv() string {
 	env, err := C.GetString("env")
 	if err != nil {

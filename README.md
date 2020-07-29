@@ -1,5 +1,13 @@
 # Go Application Template
-
+## Dependencies
+### SQLBoiler
+    - GO111MODULE=off go get -u -t github.com/volatiletech/sqlboiler
+    - GO111MODULE=off go get github.com/volatiletech/sqlboiler/drivers/sqlboiler-psql
+### go-migrate
+    - GO111MODULE=off go get -u -d github.com/golang-migrate/migrate/cmd/migrate
+    - cd $GOPATH/src/github.com/golang-migrate/migrate/cmd/migrate
+    - git checkout $TAG
+    - go build -o $GOPATH/bin/migrate $GOPATH/src/github.com/golang-migrate/migrate/cmd/migrate
 ## Directory structure
 - transport: All external communications (CLI, http services and server, GRPC, ...)
 - db: database related functionality (connection, migrations, seeders, ...)
@@ -24,8 +32,6 @@ it's not a general purpose template or framework for everyone so don't expect to
 - new
 - up
 - down
-### sqlboiler
-- generate: generate models using sqlboiler based on configured sql database.
 ### swag
 - generate: generate  models for http handlers based on swagger API spec
 ### GRPC:
