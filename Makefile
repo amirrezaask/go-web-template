@@ -8,4 +8,4 @@ install-deps:
 	GO111MODULE=off go get -u -d github.com/golang-migrate/migrate/cmd/migrate
 	cd $(GOPATH)/src/github.com/golang-migrate/migrate/cmd/migrate
 	git checkout $(TAG)
-	go build -o $(GOPATH)/bin/migrate $(GOPATH)/src/github.com/golang-migrate/migrate/cmd/migrate
+	go build -tags 'postgres' -ldflags="-X main.Version=$(git describe --tags)" -o $GOPATH/bin/migrate $GOPATH/src/github.com/golang-migrate/migrate/cmd/migrate
