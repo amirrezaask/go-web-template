@@ -14,11 +14,10 @@ it's not a general purpose template or framework for everyone so don't expect to
     - go build -tags 'postgres' -ldflags="-X main.Version=$(git describe --tags)" -o $GOPATH/bin/migrate $GOPATH/src/github.com/golang-migrate/migrate/cmd/migrate
 
 ## Directory structure
-- auth: authentication/authorization abstractions
+- pkg: shared stuff between packages and possibly other projects.
+- store: handlers database and storage layers.
 - transport: All external communications (CLI, http services and server, GRPC, databases, ...)
-- db: database related abstractions (migrations, seeders, ...)
-- monitoring: Logger and prometheus metrics
-- entities: Application entities (sqlboiler generated models or handwritten structs)
+- entities: Application data models.
 - config: application configuration
 
 

@@ -16,8 +16,8 @@ limitations under the License.
 package main
 
 import (
-	"app/cmd"
 	"app/config"
+	"app/transport/cmd"
 )
 
 func main() {
