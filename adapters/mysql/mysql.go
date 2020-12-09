@@ -13,11 +13,11 @@ type Mysql struct {
 }
 
 func (m *Mysql) DB() (*sql.DB, error) {
-	host := config.C.GetString("database.host")
-	port := config.C.GetString("database.port")
-	user := config.C.GetString("database.user")
-	password := config.C.GetString("database.password")
-	name := config.C.GetString("database.name")
+	host := config.Config.DB.MySQL.Host
+	port := config.Config.DB.MySQL.Port
+	user := config.Config.DB.MySQL.Username
+	password := config.Config.DB.MySQL.Password
+	name := config.Config.DB.MySQL.DBName
 	if m.conn == nil {
 		conn, err := mysqlConnect(host, port, user, password, name)
 		if err != nil {
@@ -32,12 +32,12 @@ func (m *Mysql) DB() (*sql.DB, error) {
 	return m.conn, nil
 }
 
-func mysqlConnectionString(host, port, username, password, db string) string {
+func mysqlConnectionString(host string, port int, username, password, db string) string {
 	if host == "" {
 		host = "localhost"
 	}
-	if port == "" {
-		port = "3306"
+	if port == 0 {
+		port = 3306
 	}
 	if username == "" {
 		username = "root"
@@ -45,7 +45,7 @@ func mysqlConnectionString(host, port, username, password, db string) string {
 	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", host, port, username, password, db)
 }
 
-func mysqlConnect(host, port, username, password, db string) (*sql.DB, error) {
+func mysqlConnect(host string, port int, username, password, db string) (*sql.DB, error) {
 	conn, err := sql.Open("mysql", mysqlConnectionString(host, port, username, password, db))
 	if err != nil {
 		return nil, fmt.Errorf("Error in openning mysql connection: %w", err)

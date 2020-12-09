@@ -1,10 +1,10 @@
 package db
 
 import (
+	"app/adapters/mysql"
+	"app/adapters/psql"
+	"app/adapters/sqlite"
 	"app/config"
-	"app/transport/mysql"
-	"app/transport/psql"
-	"app/transport/sqlite"
 	"database/sql"
 	"fmt"
 )
@@ -14,8 +14,8 @@ type SQLProvider interface {
 }
 
 func NewSQLProvider() (SQLProvider, error) {
-	config.C.SetDefault("database.type", "sqlite3")
-	dbType := config.C.GetString("database.type")
+
+	dbType := config.Config.DB.Type
 
 	switch dbType {
 	case "mysql":

@@ -12,7 +12,7 @@ type SQLite struct {
 }
 
 func (s *SQLite) DB() (*sql.DB, error) {
-	path := config.C.GetString("database.path")
+	path := config.Config.DB.SQLite.Path
 	if s.conn == nil {
 		conn, err := sqliteConnect(path)
 		if err != nil {

@@ -13,10 +13,15 @@ var Config = struct {
 }{}
 
 type DB struct {
+	Type       string     `json:"type"`
 	MySQL      MySQL      `json:"mysql"`
 	PostgreSQL PostgreSQL `json:"postgresql"`
+	SQLite     SQLite     `json:"sqlite"`
+	Redis      Redis      `json:"redis"`
 }
-
+type SQLite struct {
+	Path string `json:"path"`
+}
 type MySQL struct {
 	Host     string `json:"host,omitempty"`
 	Port     int    `json:"port,omitempty"`
@@ -24,12 +29,20 @@ type MySQL struct {
 	Password string `json:"password,omitempty"`
 	DBName   string `json:"db_name,omitempty"`
 }
+type Redis struct {
+	Host     string `json:"host,omitempty"`
+	Port     int    `json:"port,omitempty"`
+	Username string `json:"username,omitempty"`
+	Password string `json:"password,omitempty"`
+	DB       int    `json:"db,omitempty"`
+}
 type PostgreSQL struct {
 	Host     string `json:"host,omitempty"`
 	Port     int    `json:"port,omitempty"`
 	Username string `json:"username,omitempty"`
 	Password string `json:"password,omitempty"`
 	DBName   string `json:"db_name,omitempty"`
+	SSLMode  string `json:"sslmode"`
 }
 
 func Init(configPath string) error {

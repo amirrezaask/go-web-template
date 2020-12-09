@@ -2,17 +2,18 @@ package redis
 
 import (
 	"app/config"
+	"context"
 	"fmt"
 
-	"github.com/go-redis/redis/v7"
+	"github.com/go-redis/redis/v8"
 )
 
 func loadRedisConfigurationFromConfig() (*redis.Options, error) {
-	host := config.C.GetString("redis.host")
-	port := config.C.GetString("redis.port")
-	username := config.C.GetString("redis.username")
-	password := config.C.GetString("redis.password")
-	database := config.C.GetInt("redis.database")
+	host := config.Config.DB.Redis.Host
+	port := config.Config.DB.Redis.Port
+	username := config.Config.DB.Redis.Username
+	password := config.Config.DB.Redis.Password
+	database := config.Config.DB.Redis.DB
 	return &redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", host, port),
 		Username: username,
@@ -23,25 +24,25 @@ func loadRedisConfigurationFromConfig() (*redis.Options, error) {
 
 var cli *redis.Client
 
-func connect(options *redis.Options) (*redis.Client, error) {
+func connect(ctx context.Context, options *redis.Options) (*redis.Client, error) {
 	cli = redis.NewClient(options)
-	stat := cli.Ping()
+	stat := cli.Ping(ctx)
 	if stat.Err() != nil {
 		return nil, stat.Err()
 	}
 	return cli, nil
 }
 
-func NewRedis() (*redis.Client, error) {
+func NewRedis(ctx context.Context) (*redis.Client, error) {
 	options, err := loadRedisConfigurationFromConfig()
 	if err != nil {
 		return nil, err
 	}
 	if cli == nil {
-		return connect(options)
+		return connect(ctx, options)
 	}
-	if err := cli.Ping().Err(); err != nil {
-		return connect(options)
+	if err := cli.Ping(ctx).Err(); err != nil {
+		return connect(ctx, options)
 	}
 	return cli, nil
 }

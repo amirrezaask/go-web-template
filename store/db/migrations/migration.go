@@ -2,7 +2,7 @@ package migration
 
 import (
 	"app/config"
-	db2 "app/db"
+	db2 "app/store/db"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/mysql"
