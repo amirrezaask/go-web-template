@@ -1,30 +1,49 @@
 package config
 
 import (
-	"log"
+	"encoding/json"
+	"io/ioutil"
 
-	"github.com/spf13/viper"
+	"github.com/kelseyhightower/envconfig"
 )
 
-type appConfig struct {
-	*viper.Viper
+var AppName = "myapp"
+var Config = struct {
+	DB DB `json:"db"`
+}{}
+
+type DB struct {
+	MySQL      MySQL      `json:"mysql"`
+	PostgreSQL PostgreSQL `json:"postgresql"`
 }
 
-func AppEnv() string {
-	return C.GetString("app.env")
+type MySQL struct {
+	Host     string `json:"host,omitempty"`
+	Port     int    `json:"port,omitempty"`
+	Username string `json:"username,omitempty"`
+	Password string `json:"password,omitempty"`
+	DBName   string `json:"db_name,omitempty"`
+}
+type PostgreSQL struct {
+	Host     string `json:"host,omitempty"`
+	Port     int    `json:"port,omitempty"`
+	Username string `json:"username,omitempty"`
+	Password string `json:"password,omitempty"`
+	DBName   string `json:"db_name,omitempty"`
 }
 
-//C is Instance of golobby config in use.
-var C *appConfig
-
-//Init initializes the config package and loads config file.
-func Init() {
-	v := viper.New()
-	v.AddConfigPath(".")
-	v.SetConfigName("app")
-	err := v.ReadInConfig()
+func Init(configPath string) error {
+	bs, err := ioutil.ReadFile(configPath)
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
-	C = &appConfig{v}
+	err = json.Unmarshal(bs, &Config)
+	if err != nil {
+		return err
+	}
+	err = envconfig.Process(AppName, &Config)
+	if err != nil {
+		return err
+	}
+	return nil
 }

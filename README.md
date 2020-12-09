@@ -15,7 +15,7 @@ it's not a general purpose template or framework for everyone so don't expect to
 
 ## Directory structure
 - pkg: shared stuff between packages and possibly other projects.
-- store: handlers database and storage layers.
+- repo: Models generated using sqlboiler or handwritten, pure database logic.
 - transport: All external communications (CLI, http services and server, GRPC, databases, ...)
 - entities: Application data models.
 - config: application configuration
