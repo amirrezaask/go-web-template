@@ -9,9 +9,21 @@ import (
 
 var AppName = "myapp"
 var Config = struct {
-	DB DB `json:"db"`
+	Logger Logger `json:"logger"`
+	Auth   `json:"auth"`
+	DB     DB `json:"db"`
 }{}
 
+type Logger struct {
+	Type  string `json:"type"`
+	Level int    `json:"level"`
+}
+type Auth struct {
+	JWT JWT `json:"jwt"`
+}
+type JWT struct {
+	Secret string `json:"secret"`
+}
 type DB struct {
 	Type       string     `json:"type"`
 	MySQL      MySQL      `json:"mysql"`

@@ -11,12 +11,12 @@ var ErrInvalidJWT = errors.New("invalid jwt token")
 
 func NewJWTToken(claims jwt.Claims) (string, error) {
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	secret := config.C.GetString("auth.jwt.secret")
+	secret := config.Config.Auth.JWT.Secret
 	return t.SignedString(secret)
 }
 
 func ValidateToken(token string) (*jwt.Token, error) {
-	secret := config.C.GetString("auth.jwt.secret")
+	secret := config.Config.Auth.JWT.Secret
 	t, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return secret, nil
 	})

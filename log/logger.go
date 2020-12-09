@@ -1,5 +1,7 @@
 package log
 
+import "app/config"
+
 type LogLevel int
 
 const (
@@ -23,14 +25,15 @@ type ILogger interface {
 
 var loggerInstance ILogger
 
-func Logger(logger string, level LogLevel) ILogger {
+func Logger() ILogger {
 	if loggerInstance != nil {
 		return loggerInstance
 	}
-	switch logger {
+	switch config.Config.Logger.Type {
 	case LoggerBackendZap:
-		return newZap(level)
+		loggerInstance = newZap(LogLevel(config.Config.Logger.Level))
 	default:
-		return newZap(level)
+		loggerInstance = newZap(LogLevel(config.Config.Logger.Level))
 	}
+	return loggerInstance
 }
