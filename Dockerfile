@@ -1,4 +1,4 @@
-FROM golang:1.14.4 AS build
+FROM golang:latest AS build
 
 RUN mkdir /app
 COPY . /app
@@ -13,3 +13,4 @@ RUN apk add --update bash
 
 COPY --from=build /app/app app
 RUN chmod +x /app
+ENTRYPOINT [ "/app" ]

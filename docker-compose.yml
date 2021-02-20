@@ -1,12 +1,10 @@
-version: 3
+version: "3"
 
 services:
   app:
     build: .
     ports:
-    - "8080:8080"
-
-
+      - "8080:8080"
   # Uncomment if you use mysql
 #  mysql:
 #    image: percona:latest
@@ -16,8 +14,7 @@ services:
 #    ports:
 #      - "3306:3306"
 
-
-  # Uncomment if you use postgres
+# Uncomment if you use postgres
 #  psql:
 #    image: postgres:latest
 #    environment:
@@ -25,8 +22,7 @@ services:
 #    ports:
 #    - "5432:5432"
 
-
-  # Uncomment if you use redis
+# Uncomment if you use redis
 #  redis:
 #    image: redis:latest
 #    ports:
