@@ -1,0 +1,18 @@
+{
+  "database": {
+    "type": "psql",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "user": "posgres",
+    "password": "admin",
+    "name": "app"
+  },
+  "server": {
+    "http": {
+      "address": "localhost:8585"
+    }
+  },
+  "log": {
+    "level": "debug"
+  }
+}
