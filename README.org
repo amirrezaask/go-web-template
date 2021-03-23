@@ -1,0 +1,10 @@
+* Go Application Template
+** Architecture
+Go application template is heavily influenced by Hexagonal architecture and tries to follow it's rules and conventions.
+
+** Directories
+*** config
+*** pkg
+*** application
+**** domain
+*** adapters
