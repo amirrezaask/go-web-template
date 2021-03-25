@@ -1,6 +1,10 @@
 package mb
 
-import "github.com/nats-io/stan.go"
+import (
+	"template/application"
+
+	"github.com/nats-io/stan.go"
+)
 
 type natsStreaming struct {
 	Conn stan.Conn
@@ -26,7 +30,7 @@ type NatsStreamingConfig struct {
 	ClientID  string
 }
 
-func newNatsStreaming(c *NatsStreamingConfig) (MessageBroker, error) {
+func newNatsStreaming(c *NatsStreamingConfig) (application.MessageBroker, error) {
 	conn, err := stan.Connect(c.ClusterID, c.ClientID, c.Options...)
 	if err != nil {
 		return nil, err

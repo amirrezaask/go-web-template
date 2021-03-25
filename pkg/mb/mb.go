@@ -1,13 +1,11 @@
 package mb
 
-import "fmt"
+import (
+	"fmt"
+	"template/application"
+)
 
-type MessageBroker interface {
-	Subscribe(topic string, handler func(message []byte)) error
-	Publish(topic string, message []byte) error
-}
-
-func NewMessageBroker(backend string, opts interface{}) (MessageBroker, error) {
+func NewMessageBroker(backend string, opts interface{}) (application.MessageBroker, error) {
 	switch backend {
 	case "nats":
 		return newNats(opts.(*NatsMbConfig))

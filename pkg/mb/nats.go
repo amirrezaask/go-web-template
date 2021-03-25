@@ -1,6 +1,10 @@
 package mb
 
-import "github.com/nats-io/nats.go"
+import (
+	"template/application"
+
+	"github.com/nats-io/nats.go"
+)
 
 type natsMb struct {
 	Conn *nats.Conn
@@ -24,7 +28,7 @@ type NatsMbConfig struct {
 	Options []nats.Option
 }
 
-func newNats(c *NatsMbConfig) (MessageBroker, error) {
+func newNats(c *NatsMbConfig) (application.MessageBroker, error) {
 	conn, err := nats.Connect(c.Url, c.Options...)
 	if err != nil {
 		return nil, err

@@ -2,9 +2,10 @@ package logger
 
 import (
 	"go.uber.org/zap"
+	"template/application"
 )
 
-func newZapProd() (Logger, error) {
+func NewZap() (application.Logger, error) {
 	l, err := zap.NewProduction()
 	if err != nil {
 		return nil, err
@@ -13,7 +14,7 @@ func newZapProd() (Logger, error) {
 	return sl, nil
 }
 
-func newZapDevel() (Logger, error) {
+func newZapDevel() (application.Logger, error) {
 	l, err := zap.NewDevelopment()
 	if err != nil {
 		return nil, err
