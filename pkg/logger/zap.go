@@ -14,7 +14,7 @@ func NewZap() (application.Logger, error) {
 	return sl, nil
 }
 
-func newZapDevel() (application.Logger, error) {
+func NewZapDevel() (application.Logger, error) {
 	l, err := zap.NewDevelopment()
 	if err != nil {
 		return nil, err
