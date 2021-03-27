@@ -7,7 +7,9 @@ var rootCmd = &cobra.Command{
 	Short: ``,
 	Long: ``,
 }
-
+func init() {
+	rootCmd.AddCommand(serveCmd)
+}
 
 func Execute() error {
 	if err := rootCmd.Execute(); err != nil {

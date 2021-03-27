@@ -1,6 +1,6 @@
 package config
 
-import "github.com/golobby/config"
+import "github.com/golobby/config/v2"
 
 var C *config.Config
 
