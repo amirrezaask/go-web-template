@@ -18,9 +18,9 @@ Your business models ( not database models )
 ### project root
 for all your application core code, can be packaged of course.
 
-### repo
+#### repo
 your repository layer goes here.
-#### models
+##### models
 generated sqlboiler models goes here.
 
 ### .migrations
