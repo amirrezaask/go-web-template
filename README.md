@@ -10,7 +10,7 @@
 Put your config setup, by default uses [golobby/config](https://github.com/golobby/config).
 
 ### pkg
-Put all your shared code, library code in here.
+Put all your shared code/library code in here.
 
 ### models
 Your business models ( not database models )
@@ -19,13 +19,14 @@ Your business models ( not database models )
 for all your application core code, can be packaged of course.
 
 #### repo
-your repository layer goes here.
+Your repository layer goes here.
+
 ##### models
-generated sqlboiler models goes here.
+Generated sqlboiler models/handwritten database layer code.
 
 ### .migrations
-your database migrations goes here.
+Your database migrations goes here.
 
 ### .scripts
-your scripts go here
+Your scripts go here
 

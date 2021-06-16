@@ -2,23 +2,17 @@ package logger
 
 import (
 	"go.uber.org/zap"
-	"template/application"
 )
 
-func NewZap() (application.Logger, error) {
-	l, err := zap.NewProduction()
-	if err != nil {
-		return nil, err
-	}
-	sl := l.Sugar()
-	return sl, nil
+var Dev = zap.NewDevelopmentConfig
+var Prod = zap.NewProductionConfig
+
+func NewZap(configBuilder func() zap.Config) (Logger, error) {
+    logger, err := configBuilder().Build()
+    if err != nil {
+      return nil, err
+    }
+    sl := logger.Sugar()
+    return sl, nil
 }
 
-func NewZapDevel() (application.Logger, error) {
-	l, err := zap.NewDevelopment()
-	if err != nil {
-		return nil, err
-	}
-	sl := l.Sugar()
-	return sl, nil
-}

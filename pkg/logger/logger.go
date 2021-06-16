@@ -1,4 +1,4 @@
-package main
+package logger
 
 //Logger defines logger
 type Logger interface {

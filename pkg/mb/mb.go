@@ -1,4 +1,4 @@
-package main
+package mb
 
 //MessageBroker defines message broker
 type MessageBroker interface {
